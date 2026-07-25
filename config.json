@@ -1,0 +1,14 @@
+{
+  "version": "1.0",
+  "risk": {
+    "allow": 30,
+    "challenge": 70
+  },
+
+  "checks": {
+    "mouse": true,
+    "keyboard": true,
+    "timing": true,
+    "fingerprint": true
+  }
+}
