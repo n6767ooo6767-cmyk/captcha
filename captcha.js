@@ -1,279 +1,104 @@
-let config;
+let start =
+Date.now();
 
 
-let behavior = {
+let data={
 
-    startTime: Date.now(),
+mouse:0,
 
-    mouseMoves:0,
+keys:0,
 
-    clicks:0,
-
-    keys:0
-
-};
-
-
-// Загружаем настройки
-
-fetch("config.json")
-
-.then(r=>r.json())
-
-.then(data=>{
-
-    config=data;
-
-});
-
-
-
-
-// движение мыши
-
-document.addEventListener(
-"mousemove",
-()=>{
-
-behavior.mouseMoves++;
-
-});
-
-
-
-// клики
-
-document.addEventListener(
-"click",
-()=>{
-
-behavior.clicks++;
-
-});
-
-
-
-// клавиатура
-
-document.addEventListener(
-"keydown",
-()=>{
-
-behavior.keys++;
-
-});
-
-
-
-
-
-function getFingerprint(){
-
-
-return {
-
-userAgent:
-navigator.userAgent,
-
-language:
-navigator.language,
-
-screen:
-screen.width+"x"+screen.height,
-
-
-timezone:
-Intl.DateTimeFormat()
-.resolvedOptions()
-.timeZone
-
+clicks:0
 
 };
-
-
-}
-
-
-
-
-
-
-
-function calculateRisk(){
-
-
-let risk=0;
-
-
-// слишком быстро
-
-let seconds =
-(Date.now()-behavior.startTime)
-/1000;
-
-
-if(seconds < 3){
-
-risk += 
-config.weights.fastSubmit;
-
-}
-
-
-
-
-// нет движения
-
-if(
-behavior.mouseMoves < 5
-){
-
-risk +=
-config.weights.noMouse;
-
-}
-
-
-
-
-// нет клавиатуры
-
-if(
-behavior.keys===0
-){
-
-risk +=
-config.weights.noKeyboard;
-
-}
-
-
-
-
-// selenium
-
-if(
-navigator.webdriver
-){
-
-risk +=
-config.weights.webdriver;
-
-}
-
-
-
-
-
-// отключены cookies
-
-if(
-!navigator.cookieEnabled
-){
-
-risk +=
-config.weights.cookiesDisabled;
-
-}
-
-
-
-return risk;
-
-
-}
-
-
-
-
-
 
 
 
 document
-.querySelector("#form")
 .addEventListener(
-"submit",
-function(e){
+"mousemove",
+()=>{
 
+data.mouse++;
 
-e.preventDefault();
-
-
-
-let risk =
-calculateRisk();
+});
 
 
 
-let status =
-document.querySelector("#status");
+document
+.addEventListener(
+"keydown",
+()=>{
 
-
-
-console.log({
-
-risk,
-
-fingerprint:
-getFingerprint(),
-
-behavior
+data.keys++;
 
 });
 
 
 
 
-if(
-risk >= config.risk.block
-){
+
+async function verifyCaptcha(){
 
 
-status.innerHTML =
-"❌ Проверка не пройдена";
+data.time =
+(Date.now()-start)
+/1000;
 
 
-status.style.color="red";
-
-
-return;
-
-
-}
+data.webdriver =
+navigator.webdriver || false;
 
 
 
+let response =
+await fetch(
+"http://localhost:3000/captcha/check",
+{
 
-if(
-risk <= config.risk.allow
-){
+method:"POST",
 
+headers:{
 
-status.innerHTML =
-"✅ Человек подтверждён";
+"Content-Type":
+"application/json"
 
+},
 
-status.style.color="green";
-
-
-// тут отправка формы
-
-
-return;
-
-
-}
-
-
-
-
-status.innerHTML =
-"⚠ Требуется дополнительная проверка";
-
-
-status.style.color="orange";
-
-
+body:
+JSON.stringify(data)
 
 });
+
+
+let result =
+await response.json();
+
+
+
+console.log(result);
+
+
+
+if(result.success){
+
+
+alert(
+"Человек подтверждён\n\n"+
+result.token
+);
+
+
+}
+else{
+
+
+alert(
+"Проверка провалена"
+);
+
+
+}
+
+
+}
