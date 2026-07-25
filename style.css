@@ -1,0 +1,167 @@
+/* ===== Основные настройки ===== */
+
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+
+    margin: 0;
+
+    min-height: 100vh;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    background: #f1f5f9;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+}
+
+
+/* ===== Контейнер ===== */
+
+.container {
+
+    width: 360px;
+
+    background: white;
+
+    padding: 30px;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,0.12);
+
+}
+
+
+/* ===== Заголовок ===== */
+
+h2 {
+
+    text-align: center;
+
+    margin-bottom: 25px;
+
+    color: #1e293b;
+
+}
+
+
+/* ===== Поля ввода ===== */
+
+input {
+
+    width: 100%;
+
+    padding: 13px;
+
+    margin-bottom: 15px;
+
+    border:
+
+        1px solid #cbd5e1;
+
+    border-radius: 10px;
+
+    font-size: 15px;
+
+    outline: none;
+
+    transition: 0.2s;
+
+}
+
+
+input:focus {
+
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37,99,235,0.15);
+
+}
+
+
+/* ===== Кнопка ===== */
+
+button {
+
+    width: 100%;
+
+    padding: 13px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #2563eb;
+
+    color: white;
+
+    font-size: 16px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+
+}
+
+
+button:hover {
+
+    background: #1d4ed8;
+
+}
+
+
+button:active {
+
+    transform: scale(0.98);
+
+}
+
+
+/* ===== Статус CAPTCHA ===== */
+
+#status {
+
+    margin-top: 20px;
+
+    text-align: center;
+
+    font-weight: bold;
+
+    font-size: 15px;
+
+}
+
+
+/* ===== Маленький индикатор проверки ===== */
+
+#status.checking {
+
+    color: #f59e0b;
+
+}
+
+
+#status.success {
+
+    color: #16a34a;
+
+}
+
+
+#status.error {
+
+    color: #dc2626;
+
+}
